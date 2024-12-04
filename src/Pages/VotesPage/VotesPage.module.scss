@@ -1,0 +1,115 @@
+/* VotesPage.module.scss */
+
+.content-wrapper {
+    padding-top: 100px;
+    max-width: 1300px;
+    margin: 0 auto;
+    width: 95%;
+}
+
+.masonry-grid {
+    display: flex;
+    margin-left: -2rem; /* Adjust for column gap */
+    width: auto;
+}
+
+.masonry-column {
+    padding-left: 2rem; /* Column gap */
+    background-clip: padding-box;
+
+    /* Ensures cards don't break between columns */
+    > div {
+        margin-bottom: 2rem;
+    }
+}
+
+
+
+
+/* Switch styling */
+.toggle-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    position: absolute;
+    right: 20px;
+    top: 20px;
+
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+        margin-right: 0.5rem;
+
+        input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+
+            &:checked + .slider {
+                background-color: var(--active-green);
+            }
+
+            &:checked + .slider:before {
+                transform: translateX(26px);
+            }
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 34px;
+
+            &:before {
+                position: absolute;
+                content: "";
+                height: 26px;
+                width: 26px;
+                left: 4px;
+                bottom: 4px;
+                background-color: white;
+                transition: 0.4s;
+                border-radius: 50%;
+            }
+        }
+    }
+
+    span {
+        font-size: 1.6rem;
+        color: #fff;
+    }
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+    .content-wrapper {
+        padding-top: 80px;
+    }
+
+    .masonry-grid {
+        display: block;
+    }
+
+    .masonry-column {
+        padding: 0;
+    }
+
+    .vote-card {
+        margin-bottom: 1.5rem;
+    }
+
+    .vote-card__title {
+        font-size: 2rem;
+    }
+
+    .vote-card__election-due {
+        font-size: 1.4rem;
+    }
+}
