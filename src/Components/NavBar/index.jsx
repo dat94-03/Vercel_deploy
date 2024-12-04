@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { app_logo as Logo } from "../../Assets";
-import styles from './Navbar.module.scss';
+import styles from './NavBar.module.scss';
 import { Link, useLocation } from "react-router-dom";
 import { search, createVote, homeIcon } from '../../Assets';
 
