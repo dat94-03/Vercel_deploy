@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import styles from './VoteDetailPage.module.scss';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { add_btn, vote_card, vote_placeholder } from '../../Assets/index';
+import { add_btn, vote_card, back, vote_placeholder, history } from '../../Assets/index';
 import { prepareContractCall } from 'thirdweb';
 import { client, chain } from '../../Utils/constant.js';
 import { abi } from '../../Utils/voteContract.js';
@@ -15,7 +15,12 @@ import AddCandidateForm from '../../Components/AddCandidateForm';
 import EditCandidateForm from '../../Components/EditCandidateForm';
 import EditElectionForm from '../../Components/EditElectionForm';
 import CandidateDescription from '../../Components/CandidateDescription';
-import { getElectionById } from '../../Services/serverServices.js';
+import { Link } from "react-router-dom";
+
+import { ProgressBar } from '@primer/react';
+
+import { getElectionById, updateCandidate } from '../../Services/serverServices.js';
+
 
 const VoteDetailPage = () => {
     const { voteAddr } = useParams();
@@ -43,8 +48,32 @@ const VoteDetailPage = () => {
     // Effect to handle candidates and ownership logic
     useEffect(() => {
         if (data?.newCandidates) {
-            setCandidates(data.newCandidates.map(({ candidateId, name, voteCount }) => ({ id: candidateId, name: name, votes: voteCount })));
-            setIsOwner(electionData?.newElections[0]?.owner.toLowerCase() === activeAccount?.address.toLowerCase());
+            const colors = [
+                '#FFB3BA', // Pastel Red
+                '#FFDFBA', // Pastel Orange
+                '#FFFFBA', // Pastel Yellow
+                '#BAFFC9', // Pastel Green
+                '#BAE1FF', // Pastel Blue
+                '#FFB3FF', // Pastel Pink
+                '#B3B3FF', // Pastel Purple
+                '#FFB347', // Pastel Peach
+                '#B3FFB3', // Pastel Mint
+                '#FFCCFF'  // Pastel Lavender
+            ];
+            const sortedCandidates = data.newCandidates
+                .map(({ candidateId, name, voteCount }, index) => ({
+                    id: candidateId,
+                    name: name,
+                    votes: voteCount,
+                    color: colors[index % colors.length], // Cycle through colors
+                }))
+                .sort((a, b) => b.votes - a.votes);
+
+            setCandidates(sortedCandidates);
+            setIsOwner(
+                electionData?.newElections[0]?.owner.toLowerCase() ===
+                activeAccount?.address.toLowerCase()
+            );
         }
     }, [data, electionData, activeAccount]);
 
@@ -82,7 +111,6 @@ const VoteDetailPage = () => {
 
             // Refetch Apollo query data
             await refetch(); // Refetch candidates from GET_ELECTION_CANDIDATES
-
             // Refetch backend data for the election
             if (electionData?.newElections[0]?.id) {
                 await handleGetElectionData(electionData?.newElections[0]?.id);
@@ -92,13 +120,59 @@ const VoteDetailPage = () => {
         }
     };
 
+
+    // Add this function to calculate total votes
+    const calculateTotalVotes = () => {
+        return candidates.reduce((sum, candidate) => sum + parseInt(candidate.votes), 0);
+    };
+
+    // Add this function to calculate vote percentage
+    const calculateVotePercentage = (votes) => {
+        const totalVotes = calculateTotalVotes();
+        return totalVotes === 0 ? 0 : (votes / totalVotes) * 100;
+    }
+    const handleVoteSuccessFullyOnBackend = async (candidate) => {
+        try {
+            // Refetch Apollo query data
+            await refetch(); // Refetch candidates from GET_ELECTION_CANDIDATES
+            const candidateId = parseInt(candidate.id, 10);
+            const electionId = parseInt(electionDataBe.id, 10);
+            // Refetch backend data for the election
+            if (electionData?.newElections[0]?.id) {
+                await updateCandidate(candidateId, electionId, { voteCount: candidate.votes });
+            }
+        } catch (error) {
+            console.error('Error refetching data:', error);
+        }
+
+    };
+
     // Loading and error handling
     if (loading) return <p>Loading candidates...</p>;
     if (error) return <p>Error loading candidates: {error.message}</p>;
 
     return (
         <div className={styles.votePage}>
-            <h1 className={styles.voteTitle}>{electionData?.newElections[0]?.title.toUpperCase() || 'Loading title...'}</h1>
+            <div className={styles.voteHeadBar}>
+                <Link
+                    to={`/vote/history/${voteAddr}`}
+                    state={{ voteAddr: voteAddr }}
+                    className={styles['history_btn']}
+                >
+
+                    <span>Vote History</span>
+                    <img src={history} alt='history_icon' className={styles.history_icon} />
+                </Link>
+
+                <Link
+                    to={`/`}
+                    className={styles.back_btn}
+                    state={{ voteAddr: voteAddr }}>
+                    <img src={back} alt='back_btn' className={styles.back_icon} />
+                    <span>Back</span>
+                </Link>
+                <h1 className={styles.voteTitle}>{electionData?.newElections[0]?.title.toUpperCase() || 'Loading title...'}</h1>
+            </div>
 
             <div className={styles.voteHeading}>
 
@@ -127,7 +201,27 @@ const VoteDetailPage = () => {
                     <pre>{electionDataBe?.description}</pre>
                 </div>
             </div>
-            <h2>{isOwner ? 'Edit your vote' : (candidates.length ? 'Vote for Your Candidate' : 'No candidates added yet.')}</h2>
+            <h2 className={styles.overallProgressHeading}>{"Overall Progress"}</h2>
+
+            <div className={styles.overallProgressBar}>
+                <ProgressBar aria-label="Candidate Votes">
+                    {candidates.map((candidate) => (
+                        <ProgressBar.Item
+                            key={candidate.id}
+                            progress={calculateVotePercentage(candidate.votes)}
+                            sx={{
+                                bg: candidate.color, // Use candidate's color
+                            }}
+                        />
+                    ))}
+                </ProgressBar>
+                {candidates.map((candidate) => (
+                    <div key={candidate.id} className={styles.voteInfo}>
+                        <span style={{ color: candidate.color }}>{candidate.name}</span>: {calculateVotePercentage(candidate.votes).toFixed(1)}%
+                    </div>
+                ))}
+            </div>
+            <h2 className={styles.overallProgressHeading}>{isOwner ? 'Edit your vote' : (candidates.length ? 'Vote for Your Candidate' : 'No candidates added yet.')}</h2>
             <div className={styles.candidatesList}>
 
                 {/* Render candidates */}
@@ -156,9 +250,18 @@ const VoteDetailPage = () => {
                                 <div className={styles.buttonContainer}>
                                     <TransactionButton
                                         transaction={() => prepareContractCall({ contract: CONTRACT, method: 'vote', params: [candidate.id] })}
-                                        onTransactionConfirmed={() => {
+                                        onTransactionConfirmed={async () => {
+                                            const fetch = await refetch();
+                                            console.log('fetch', fetch);
+                                            handleVoteSuccessFullyOnBackend(
+                                                {
+                                                    id: candidate.id,
+                                                    votes: fetch.data.newCandidates.find((c) => c.candidateId === candidate.id).voteCount,
+                                                }
+                                            );
+
                                             alert('Vote successfully!');
-                                            refetch();
+
                                         }}
                                         disabled={!!voterData?.newVotes?.length}
                                         onError={(error) => {
@@ -195,6 +298,8 @@ const VoteDetailPage = () => {
                     </div>
                 )}
             </div>
+
+
             <Modal isOpen={isModalAddOpen} onClose={handleCloseAddModal}>
                 <AddCandidateForm contract={CONTRACT} voteAddr={voteAddr} onSuccess={handleRefetch} />
             </Modal>
