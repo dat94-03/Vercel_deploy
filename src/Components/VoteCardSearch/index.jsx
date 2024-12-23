@@ -20,7 +20,7 @@ function VoteCardSearch({ backendElections }) {
             setElection(data.newElections[0]);
             console.log(data)
             console.log(backendElections)
-            console.log(activeAccount?.address.toLowerCase(),election?.owner )
+            console.log(activeAccount?.address.toLowerCase(),data?.newElections[0].owner )
         }
     }, [data]);
 

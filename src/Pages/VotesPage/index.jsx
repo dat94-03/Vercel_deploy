@@ -14,7 +14,8 @@ function VotesPage() {
     const [showUserElections, setShowUserElections] = useState(false);
     const activeAccount = useActiveAccount();
 
-    const { data: allElectionsData } = useQuery(GET_ELECTIONS);
+    const { data: allElectionsData } = useQuery(GET_ELECTIONS,{
+        fetchPolicy: "network-only",});
     const { data: userElectionsData } = useQuery(GET_USER_ELECTIONS, {
         variables: { owner: activeAccount?.address || "" },
         skip: !activeAccount,
