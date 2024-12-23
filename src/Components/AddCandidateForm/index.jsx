@@ -42,11 +42,17 @@ const AddCandidateForm = ({ contract, onSuccess, onFailure ,voteAddr}) => {
         }
     }
 
-    const handleTransactionConfirmed = () => {
-        handleCreateCandidate();
-        alert('Candidate added successfully!');
-        setCandidateName(""); // Clear input field after successful transaction
-        onSuccess(); // Notify parent to refetch data or close modal
+    const handleTransactionConfirmed = async () => {
+        try {
+            await handleCreateCandidate(); // Wait for the candidate creation process to complete
+            alert('Candidate added successfully!');
+            setCandidateName(""); // Clear the input field after successful transaction
+            onSuccess && onSuccess(); // Notify the parent component
+        } catch (error) {
+            console.error('Error during candidate creation:', error);
+            alert('An error occurred while adding the candidate.');
+            onFailure && onFailure(); // Notify the parent about the failure
+        }
     };
 
 
