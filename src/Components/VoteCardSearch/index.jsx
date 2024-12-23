@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 import { vote_placeholder, vote_candidate, vote_card } from '../../Assets/index.js';
 import { GET_ELECTION_BY_ID } from '../../GraphQL/client.jsx';
 import { useQuery } from '@apollo/client';
+import { useActiveAccount } from "thirdweb/react";
 
 function VoteCardSearch({ backendElections }) {
     const [election, setElection] = useState(null);
-
+    const activeAccount = useActiveAccount();
     // Fetch election data
     const { data } = useQuery(GET_ELECTION_BY_ID, {
         variables: { electionId: backendElections?.id?.toString() || '' },
@@ -34,7 +35,7 @@ function VoteCardSearch({ backendElections }) {
         <div
             className={`${styles['vote-card']} 
                 ${election?.electionEndTime && isElectionEnded(election.electionEndTime) ? styles['disabled'] : ''} 
-                ${election?.owner ? styles['owner'] : ''}`}
+                ${activeAccount?.address.toLowerCase()==election?.owner ? styles['owner'] : ''}`}
         >
             <Link
                 to={`/vote/${election?.electionAddr}`}
