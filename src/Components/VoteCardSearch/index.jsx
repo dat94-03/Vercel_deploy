@@ -14,11 +14,13 @@ function VoteCardSearch({ backendElections }) {
         variables: { electionId: backendElections?.id?.toString() || '' },
         skip: !backendElections?.id,
     });
-
     // Update the election state when data changes
     useEffect(() => {
         if (data?.newElections?.length > 0) {
             setElection(data.newElections[0]);
+            console.log(data)
+            console.log(backendElections)
+            console.log(activeAccount?.address.toLowerCase(),election?.owner )
         }
     }, [data]);
 
@@ -30,7 +32,6 @@ function VoteCardSearch({ backendElections }) {
     const electionEndDate = election?.electionEndTime
         ? `Vote end: ${new Date(election.electionEndTime * 1000).toLocaleString()}`
         : 'No end date available';
-
     return (
         <div
             className={`${styles['vote-card']} 

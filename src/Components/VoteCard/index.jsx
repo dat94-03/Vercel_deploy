@@ -12,7 +12,7 @@ function VoteCard({election, backendElections}) {
     return ( <div
         className={`${styles['vote-card']} 
         ${isElectionEnded(election.electionDue) ? styles['disabled'] : ''} 
-        ${activeAccount?.address.toLowerCase() ==  election.owner? styles['owner'] : ''}`}
+        ${activeAccount?.address.toLowerCase()==election?.owner.toLowerCase() ? styles['owner'] : ''}`}
     >
         <Link
 
