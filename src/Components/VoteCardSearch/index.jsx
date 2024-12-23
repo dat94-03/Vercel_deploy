@@ -18,9 +18,9 @@ function VoteCardSearch({ backendElections }) {
     useEffect(() => {
         if (data?.newElections?.length > 0) {
             setElection(data.newElections[0]);
-            console.log(data)
-            console.log(backendElections)
-            console.log(activeAccount?.address.toLowerCase(),data?.newElections[0].owner )
+            // console.log(data)
+            // console.log(backendElections)
+            // console.log(activeAccount?.address.toLowerCase(),data?.newElections[0].owner )
         }
     }, [data]);
 

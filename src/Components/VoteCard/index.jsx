@@ -20,14 +20,16 @@ function VoteCard({election, backendElections}) {
             state={{ voteAddr: election.electionAddr }}
             className={styles['vote-card__link']}
         ></Link>
+        <div className={`${styles['image-wrapper']} ${styles['skeleton']}`}>
+
         <img
             src={
                 backendElections.find(e => Number(e.id) === Number(election.id))?.photoLink
-                || vote_placeholder
             }
             alt="Election"
             className={styles['vote-card__image']}
         />
+        </div>
         <div className={styles['vote-card__text-wrapper']}>
             <h2 className={styles['vote-card__title']}>{election.title}</h2>
             <div className={styles['vote-card__stat']}>
