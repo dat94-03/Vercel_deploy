@@ -264,7 +264,7 @@ const VoteDetailPage = () => {
                                             );
 
                                             alert('Vote successfully!');
-
+                                            refetch();
                                         }}
                                         disabled={!!voterData?.newVotes?.length}
                                         onError={(error) => {
