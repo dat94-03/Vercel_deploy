@@ -24,7 +24,22 @@
     margin-bottom: 10px;
     color: var(--text-color);
   }
+  textarea {
+    margin-bottom: 15px;
+    padding: 8px;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    width: 100%;
+    max-width: 400px;
+    height: 100px; /* Set height for larger input area */
+    background-color: var(--solid-soft-bg);
+    color: var(--text-color);
+    resize: vertical; /* Allow vertical resizing only */
+  }
 
+  textarea::placeholder {
+    color: var(--text-color);
+  }
   input {
     margin-bottom: 15px;
     padding: 8px;

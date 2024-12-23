@@ -15,7 +15,7 @@ function CreateVote() {
     const [endDate, setEndDate] = useState(""); // State for end date and time
     const [description, setDescription] = useState(""); // State for description
     const [photo, setPhoto] = useState(null); // State for photo
-    
+
     const activeAccount = useActiveAccount();
     const navigate = useNavigate();
 
@@ -67,30 +67,30 @@ function CreateVote() {
     };
 
     const handleCreateElection = async (id) => {
-        try{
+        try {
             // const {data} = await refetch();
             // if(data && data.newElections.length > 0){
-                // const electionId = data.newElections[0].electionId;
-                const  electionId = id ;
-                const {photoLink} = await uploadImageByFile(photo);
-                console.log("Photo link:", photoLink);
-                const election = {
-                    id: electionId,
-                    name: title,
-                    description: description,
-                    startDate: new Date().toISOString(),
-                    endDate: new Date(endDate).toISOString(),
-                    status: '1',
-                    photoLink: photoLink,
-                    walletAddress: activeAccount.address,
-                };
-                console.log("Election data:", election);
+            // const electionId = data.newElections[0].electionId;
+            const electionId = id;
+            const { photoLink } = await uploadImageByFile(photo);
+            console.log("Photo link:", photoLink);
+            const election = {
+                id: electionId,
+                name: title,
+                description: description,
+                startDate: new Date().toISOString(),
+                endDate: new Date(endDate).toISOString(),
+                status: '1',
+                photoLink: photoLink,
+                walletAddress: activeAccount.address,
+            };
+            console.log("Election data:", election);
 
-                const response = await createElection(election);
-                console.log("Election created:", response);
+            const response = await createElection(election);
+            console.log("Election created:", response);
             // }
         }
-        catch(error){
+        catch (error) {
             console.error('Error creating election:', error);
             throw error;
         }
@@ -128,14 +128,13 @@ function CreateVote() {
             {/* Input field for vote description */}
             <div className={styles.inputGroup}>
                 <label htmlFor="description" className={styles.label}>Description</label>
-                <input
+                <textarea
                     id="description"
-                    type="text"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
                     className={styles.input}
                     placeholder="Enter the description of your vote"
-                />
+                ></textarea>
             </div>
 
             {/* File upload for photo */}
@@ -164,7 +163,7 @@ function CreateVote() {
                     // console.log("Transaction confirmed:", tx);
                     //handleGetElectionData();    ---> khong can phai fetch lai toan bo du lieu nhu the
                     //lay luon id tu tx log (nhung da bi ma huy -> phai decode)
-                  
+
                     try {
                         const logs = tx.logs;
                         // console.log ('log', logs);
@@ -178,19 +177,19 @@ function CreateVote() {
                             throw new Error("Event 'NewElection' not found in logs");
                         }
                         // lay id, title, election Address ra tu event log
-                        const {id, election}  = abiInterface.decodeEventLog(event, eventLog.data, eventLog.topics);
+                        const { id, election } = abiInterface.decodeEventLog(event, eventLog.data, eventLog.topics);
                         await handleCreateElection(id.toString());
                         alert("Vote created successfully!");
                         // Redirect to the election address page
                         navigate(`/vote/${election}`);
-                       
+
                     }
-                    catch (error){
+                    catch (error) {
                         console.log(error);
                     }
-                    
-                    
-                    
+
+
+
                 }}
                 onTransactionFailed={(error) => {
                     console.error("Transaction failed:", error);
