@@ -38,7 +38,10 @@ const VoteDetailPage = () => {
 
     const CONTRACT = getContract({ client, address: voteAddr, chain, abi });
 
-    const { data, loading, error, refetch } = useQuery(GET_ELECTION_CANDIDATES, { variables: { electionAddr: voteAddr || '' } });
+    const { data, loading, error, refetch } = useQuery(GET_ELECTION_CANDIDATES, {
+        variables: { electionAddr: voteAddr || '' },
+        fetchPolicy: "network-only", // Always fetch fresh data
+    });
     const { data: electionData } = useQuery(GET_ELECTION_DATA, { variables: { electionAddr: voteAddr || '' } });
     const { data: voterData } = useQuery(GET_VOTER, {
         variables: { voterAddr: activeAccount?.address || '', electionAddr: voteAddr || '' },

@@ -47,7 +47,7 @@ const AddCandidateForm = ({ contract, onSuccess, onFailure ,voteAddr}) => {
             await handleCreateCandidate(); // Wait for the candidate creation process to complete
             alert('Candidate added successfully!');
             setCandidateName(""); // Clear the input field after successful transaction
-            onSuccess && onSuccess(); // Notify the parent component
+            onSuccess(); // Notify the parent component
         } catch (error) {
             console.error('Error during candidate creation:', error);
             alert('An error occurred while adding the candidate.');
