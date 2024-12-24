@@ -34,6 +34,7 @@ const VoteDetailPage = () => {
     const [isModalEditElectionOpen, setIsModalEditElectionOpen] = useState(false);
     const [editingCandidate, setEditingCandidate] = useState(undefined);
     const [electionDataBe, setElectionDataBe] = useState({});
+    const [imageLoaded, setImageLoaded] = useState(false); // State to track image loading
 
 
     const CONTRACT = getContract({ client, address: voteAddr, chain, abi });
@@ -149,6 +150,9 @@ const VoteDetailPage = () => {
         }
 
     };
+    const handleImageLoad = () => {
+        setImageLoaded(true); // Set image as loaded once onLoad is triggered
+    };
 
     // Loading and error handling
     if (loading) return <p>Loading candidates...</p>;
@@ -179,11 +183,13 @@ const VoteDetailPage = () => {
 
             <div className={styles.voteHeading}>
 
-                <div className={`${styles.electionPoster}`}>
+                <div className={`${styles['electionPoster']} ${!imageLoaded ? styles['skeleton'] : ''}`}>
                     <img
                         className={styles.electionImage}
-                        src={electionDataBe?.photoLink || vote_placeholder} // Use tempPhotoLink if available
+                        src={electionDataBe?.photoLink} // Use tempPhotoLink if available
                         alt="Election"
+                        onLoad={handleImageLoad} // Trigger when the image loads
+                        
                     />
                     {isOwner && (
                         <>

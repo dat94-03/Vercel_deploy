@@ -62,22 +62,22 @@
         display: flex;
         justify-content: space-between;
         width: 90%;
-        height: 64vh;
+        height: 50vh;
         align-items: stretch; /* Ensure equal height of children */
         margin: 0 100px;
         .electionPoster {
             width: auto; /* Dynamically adjust width */
-            max-width: 70%;
-            height: 100%; /* Maintain aspect ratio */
+            max-width: 50%;
+            min-width: 400px;
+            height: 400px; /* Maintain aspect ratio */
             margin-right: 60px;
             border: 1px solid var(--border-color2);
             border-radius: 15px;
             box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
-            background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
-            backdrop-filter: blur(20px);
+            // background: linear-gradient(145deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            // backdrop-filter: blur(20px);
             overflow: hidden;
-            transition: transform 0.3s, box-shadow 0.3s;
-    
+            position: relative;
             .electionImage {
                 width: 100%;
                 max-width: 40vw;
@@ -227,7 +227,7 @@
         border: 1px solid var(--border-color);
         padding: 20px;
         margin: 10px;
-        width: 350px;
+        width: 330px;
         border-radius: 10px;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
         text-align: center;
@@ -240,8 +240,8 @@
         }
 
         .candidateImage {
-            width: 308px;
-            height: 308px;
+            width: 280px;
+            height: 280px;
             display: block;
             object-fit: cover;
             border-radius: 10px;
@@ -439,5 +439,33 @@
     font-size: 4rem; // Adjust the size as needed
     font-weight: bold; // Optional: make it bold
     margin-bottom: 1rem; // Optional: add some space below
+}
+
+.skeleton {
+    background-color: #e2e5e7;
+    background-image: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0),
+        rgba(255, 255, 255, 0.5),
+        rgba(255, 255, 255, 0)
+    );
+    background-size: 40px 100%;
+    background-repeat: no-repeat;
+    background-position: left -40px top 0;
+    animation: shine 1.2s ease-in-out infinite;
+    border-radius: 15px; /* Match container corners */
+    height: 100%; /* Match container height */
+    width: 100%; /* Match container width */
+
+    /* Ensure a graceful fallback for motion preferences */
+    @media (prefers-reduced-motion: reduce) {
+        animation: none; /* Disable shimmer animation */
+    }
+}
+
+@keyframes shine {
+    to {
+        background-position: right -40px top 0;
+    }
 }
 

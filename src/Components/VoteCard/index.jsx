@@ -29,12 +29,13 @@ function VoteCard({ election, backendElections }) {
                 state={{ voteAddr: election.electionAddr }}
                 className={styles['vote-card__link']}
             ></Link>
-            <div className={`${styles['image-wrapper']} ${!imageLoaded ? styles['skeleton'] : ''}`}>
+            <div className={`${styles['image-wrapper']} ${!imageLoaded ? styles['skeleton'] : ''} `}>
                 <img
                     src={imageSrc}
                     alt="Election"
                     className={styles['vote-card__image']}
                     onLoad={handleImageLoad} // Trigger when the image loads
+                    
                 />
             </div>
             <div className={styles['vote-card__text-wrapper']}>
