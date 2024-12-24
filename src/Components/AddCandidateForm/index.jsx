@@ -10,7 +10,10 @@ import {createCandidate} from '../../Services/serverServices'
 
 const AddCandidateForm = ({ contract, onSuccess, onFailure ,voteAddr}) => {
     const [candidateName, setCandidateName] = useState("");
-    const { data} = useQuery(GET_ELECTION_BY_ADDR, { variables: { electionAddr: voteAddr || '' } });
+    const { data } = useQuery(GET_ELECTION_BY_ADDR, { 
+        variables: { electionAddr: voteAddr || '' },
+        fetchPolicy: 'network-only' // Fetch fresh data every time
+      });
 
     const handleCandidateNameChange = (e) => {
         setCandidateName(e.target.value);
