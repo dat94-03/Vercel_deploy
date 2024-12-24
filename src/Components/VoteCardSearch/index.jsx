@@ -13,6 +13,7 @@ function VoteCardSearch({ backendElections }) {
     const { data } = useQuery(GET_ELECTION_BY_ID, {
         variables: { electionId: backendElections?.id?.toString() || '' },
         skip: !backendElections?.id,
+         fetchPolicy: 'network-only'
     });
     // Update the election state when data changes
     useEffect(() => {

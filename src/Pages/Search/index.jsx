@@ -11,7 +11,7 @@ function SearchPage() {
     const [filter, setFilter] = useState({ title: '', isEnd: null, sortByCandidates: null, sortByVotes: null });
     const [selectedValues, setSelectedValues] = useState([]);
 
-    const { data: allElectionsData } = useQuery(GET_ELECTIONS);
+    const { data: allElectionsData } = useQuery(GET_ELECTIONS,{ fetchPolicy: 'network-only'});
 
     const handleCheckboxChange = (event) => {
         const { value, checked } = event.target;

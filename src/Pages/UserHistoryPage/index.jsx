@@ -26,6 +26,7 @@ function UserHistoryPage() {
     const { userAddr } = useParams();
     const { loading, error, data } = useQuery(GET_USER_HISTORY, {
         variables: { voter: userAddr || '' },
+         fetchPolicy: 'network-only'
     });
 
     if (loading) return <div>Loading...</div>;

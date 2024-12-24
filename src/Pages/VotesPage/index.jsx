@@ -19,6 +19,7 @@ function VotesPage() {
     const { data: userElectionsData } = useQuery(GET_USER_ELECTIONS, {
         variables: { owner: activeAccount?.address || "" },
         skip: !activeAccount,
+         fetchPolicy: 'network-only'
     });
 
     const [backendElections, setBackendElections] = useState([]);

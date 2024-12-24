@@ -43,10 +43,11 @@ const VoteDetailPage = () => {
         variables: { electionAddr: voteAddr || '' },
         fetchPolicy: "network-only", // Always fetch fresh data
     });
-    const { data: electionData } = useQuery(GET_ELECTION_DATA, { variables: { electionAddr: voteAddr || '' } });
+    const { data: electionData } = useQuery(GET_ELECTION_DATA, { variables: { electionAddr: voteAddr || '' } , fetchPolicy: 'network-only'});
     const { data: voterData } = useQuery(GET_VOTER, {
         variables: { voterAddr: activeAccount?.address || '', electionAddr: voteAddr || '' },
         skip: !activeAccount,
+         fetchPolicy: 'network-only'
     });
 
     // Effect to handle candidates and ownership logic

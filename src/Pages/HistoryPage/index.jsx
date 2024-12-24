@@ -26,6 +26,7 @@ function HistoryPage() {
     const { voteAddr } = useParams();
     const { loading, error, data: allElectionsData } = useQuery(GET_ELECTION_HISTORY, {
         variables: { electionAddr: voteAddr || '' },
+         fetchPolicy: 'network-only'
     });
 
     if (loading) return <div>Loading...</div>;

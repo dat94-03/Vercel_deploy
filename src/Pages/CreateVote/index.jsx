@@ -22,7 +22,8 @@ function CreateVote() {
     // Fetch election data using GraphQL query
     const { refetch } = useQuery(GET_NEW_VOTE, {
         variables: { owner: activeAccount?.address },
-        skip: !activeAccount
+        skip: !activeAccount,
+         fetchPolicy: 'network-only'
     });
 
     // Function to handle fetching new election data and redirecting

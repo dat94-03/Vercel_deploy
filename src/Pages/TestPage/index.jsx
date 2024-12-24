@@ -20,7 +20,7 @@ function TestPage() {
     });
 
     // GraphQL query
-    const { refetch } = useQuery(GET_ELECTION); // Add `refetch`
+    const { refetch } = useQuery(GET_ELECTION,{ fetchPolicy: 'network-only'}); // Add `refetch`
 
     // Handler to display only title and owner from election data
     const handleGetElectionData = async () => {
