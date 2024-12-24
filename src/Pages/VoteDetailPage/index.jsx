@@ -269,9 +269,8 @@ const VoteDetailPage = () => {
                                                     votes: fetch.data.newCandidates.find((c) => c.candidateId === candidate.id).voteCount,
                                                 }
                                             );
-
-                                            alert('Vote successfully!');
                                             refetch();
+                                            alert('Vote successfully!');
                                         }}
                                         disabled={!!voterData?.newVotes?.length}
                                         onError={(error) => {
