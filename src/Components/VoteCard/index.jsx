@@ -29,13 +29,12 @@ function VoteCard({ election, backendElections }) {
                 state={{ voteAddr: election.electionAddr }}
                 className={styles['vote-card__link']}
             ></Link>
-            <div className={`${styles['image-wrapper']} ${!imageLoaded ? styles['skeleton'] : ''} `}>
+            <div className={`${styles['image-wrapper']} ${!imageLoaded ? styles['skeleton'] : ''}`}>
                 <img
                     src={imageSrc}
                     alt="Election"
                     className={styles['vote-card__image']}
                     onLoad={handleImageLoad} // Trigger when the image loads
-                    
                 />
             </div>
             <div className={styles['vote-card__text-wrapper']}>
@@ -52,7 +51,7 @@ function VoteCard({ election, backendElections }) {
                 </div>
                 <p className={styles['vote-card__due']}>
                     {election.electionDue
-                        ? `Vote end: ${new Date(election.electionDue * 1000).toISOString().replace('T', ' ').split('.')[0]}`
+                        ? `Vote end: ${new Date(election.electionDue * 1000).toLocaleString('en-US', { timeZone: 'Asia/Bangkok' })}`
                         : 'No end date available'}
                 </p>
             </div>
